@@ -18,8 +18,6 @@
 			--background: #202020;
 			background: var(--background);
 			color: white;
-			cursor: url('favicon.png'), auto;
-			/* cursor: none; */
 		}
 
 		.no-highlight {
