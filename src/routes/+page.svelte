@@ -10,27 +10,26 @@
 	const R = 80;
 	const N = 16;
 	const r = R * Math.sin(Math.PI / N);
-	const center = { cx: 500, cy: 200 };
+	const center = { cx: 100, cy: 0 };
 </script>
 
 <div class="app">
-	{#each [0, 1, 2, 3] as _, j}
-		{#each Array(N) as _, i}
-			{@const cx = center.cx + R * Math.cos((2 * Math.PI * i) / N)}
-			{@const cy = center.cy + 2 * R * j + R * Math.sin((2 * Math.PI * i) / N)}
-			{#if j % 2 ? cx <= center.cx : cx >= center.cx}
-				<Fob fob={{ cx, cy, radius: r }} src={FobImg} />
-			{/if}
-		{/each}
+	<div class="axis"></div>
+	{#each Array(40) as _, i}
+		{@const cx = center.cx + i * 25}
+		{@const angle = i * (Math.PI / 18)}
+		{@const cy = center.cy + Math.cos(angle) * 100}
+		<Fob fob={{ cx, cy, radius: 10 }} src={FobImg} />
 	{/each}
-	{#if splash}
+	<!-- {#if splash}
 		<Splash />
-	{/if}
+	{/if} -->
 </div>
 
 <style>
 	.app {
 		display: grid;
+		align-content: center;
 		height: 100dvh;
 		-webkit-user-select: none;
 		user-select: none;
@@ -42,5 +41,13 @@
 		/* background-position-y: center; */
 		box-sizing: border-box;
 		/* border: 1px solid yellow; */
+	}
+
+	.axis {
+		grid-area: 1/1;
+		align-self: center;
+		width: 100%;
+		height: 1px;
+		background: #d2b48c80;
 	}
 </style>
