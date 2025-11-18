@@ -6,11 +6,11 @@
 	const li = '<li style="margin: 12px 0 0 -20px; color: var(--orange);">';
 
 	const CONTENT = `
-        <span style='font-style: italic;'>You are a self-aware zombie kitten drifting through space, trying to delay the inevitable and avoid infecting the innocent.</span>
+        <span style='font-style: italic;'>You are a self-aware zombie kitten drifting through space, trying not to infect the innocent. The inevitable cannot be stopped—but it can be delayed.</span>
         ${ul}
         ${li}<span>Use arrow keys to adjust your velocity—horizontal or vertical.  Speed increases are capped.</span></li>
-        ${li}<span>Touching a live kitten temporarily turns it into a zombie.</span></li>
-        ${li}<span>Zombie kittens spread the plague.</span></li>
+        ${li}<span>Touching a live kitten turns it into a permanent zombie.</span></li>
+        ${li}<span>Zombie kittens spread the plague. Their infections are temporary.</span></li>
         ${li}<span>Keep at least one kitten alive.</span></li>
         </ul>`;
 

@@ -1,5 +1,5 @@
 import { random } from 'lodash-es';
-import { APP_KEY, PET_RADIUS, PET_VELOCITY, TICK_MS, ZET_RADIUS } from './const';
+import { APP_KEY, DEAD_MS, PET_RADIUS, PET_VELOCITY, TICK_MS, ZET_RADIUS } from './const';
 import { _sound } from './sound.svelte';
 import { _prompt, _stats, ss } from './state.svelte';
 import { clientRect, handleCollision, isPet, isZet, overlap, post } from './utils';
@@ -92,13 +92,19 @@ const onTick = () => {
         if (!isZet(fob)) {
             fob.cx += fob.vel.x;
             fob.cy += fob.vel.y;
+
+            if (fob.dead && ((ss.ticks - fob.dead) * TICK_MS) >= DEAD_MS) {
+                _sound.play('won', { rate: 4 });
+                shake(fob);
+                delete fob.dead;
+            }
         }
 
         const edge = hitEdge(fob);
 
         if (edge) {
             if (isZet(fob)) {
-                shake();
+                shake(fob);
                 _sound.play('plop');
                 ss.bounced = true;
                 post(() => delete ss.bounced, 1000);
@@ -133,11 +139,20 @@ const onTick = () => {
             }
 
             if (isZet(fob1) || isZet(fob2) || fob1.dead || fob2.dead) {
-                shake();
+                const check = (fob) => {
+                    if (isPet(fob) && !fob.dead) {
+                        _sound.play('lost', { rate: 2 });
+                        shake(fob);
+                        fob.dead = ss.ticks;
 
-                if (isPet(fob1) || isPet(fob2)) {
-                    (isPet(fob1) ? fob1 : fob2).dead = true;
-                }
+                        if (ss.fobs.filter(f => isPet(f)).every(f => f.dead)) {
+                            onOver('lost');
+                        }
+                    }
+                };
+
+                check(fob1);
+                check(fob2);
             }
 
             const { v1, v2 } = handleCollision(fob1, fob2);
@@ -222,10 +237,9 @@ const addPets = () => {
 
 export const findZet = () => ss.fobs.find((fob) => isZet(fob));
 
-const shake = () => {
-    const zet = findZet();
-    zet.shake = true;
-    post(() => delete zet.shake, 200);
+const shake = (fob) => {
+    fob.shake = true;
+    post(() => delete fob.shake, 200);
 };
 
 export const doResize = (init) => {
@@ -243,5 +257,26 @@ export const doResize = (init) => {
         ss.dlg = true;
 
         delete ss.over;
+    }
+};
+
+export const onOver = (over) => {
+    _sound.play(over === 'won' ? 'won' : 'lost');
+    clearInterval(ss.timer);
+    delete ss.timer;
+
+    if (over === 'won') {
+        post(() => {
+            _stats.won += 1;
+
+            // const points = score();
+            // _stats.total_points += points;
+
+            // if (points > _stats.best_points) {
+            //     _stats.best_points = points;
+            // }
+
+            persist();
+        });
     }
 };
