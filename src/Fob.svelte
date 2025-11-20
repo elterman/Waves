@@ -5,7 +5,7 @@
 	import { random } from 'lodash-es';
 
 	const { fob, src, scale = 1 } = $props();
-	const { cx, cy, radius, tilt } = $derived(fob);
+	const { cx, cy, radius } = $derived(fob);
 	const transition = $derived(ss.landing ? 'transform 1s, width 1s' : '');
 
 	const style = $derived(
@@ -14,8 +14,13 @@
 </script>
 
 <div class="fob" {style} transition:fade={{ duration: ss.over ? 500 : 0 }}>
-	<div class="content {fob.shake ? 'shake' : ''}" style={`rotate: ${tilt || 0}deg; transition: rotate ${ss.over ? '1s' : '0.3s'};`}>
-		<img class={fob.dead ? (fob.dead === true ? '' : 'sick') : 'alive'} {src} alt="" style="animation-delay: {random(0, 1)}s;" />
+	<div class="shakeable {fob.shake ? 'shake' : ''}">
+		<div class="rotatable {fob.dead ? '' : 'alive'}" style="animation-delay: {random(0, 1)}s;">
+			{#if fob.lives}
+				<div class="lives" style="font-size: {13 * Math.min(ss.scale, 1)}px;">{fob.lives || ''}</div>
+			{/if}
+			<img {src} alt="" />
+		</div>
 	</div>
 </div>
 
@@ -25,27 +30,36 @@
 		display: grid;
 		box-sizing: border-box;
 		aspect-ratio: 1;
-		border-radius: 50%;
 		place-self: start;
 	}
 
-	.content {
+	.shakeable {
 		grid-area: 1/1;
 		display: grid;
 		border-radius: 50%;
 	}
 
+	.rotatable {
+		display: grid;
+	}
+
+	.lives {
+		grid-area: 1/1;
+		place-self: start center;
+		font-family: Roboto Condensed;
+		/* font-size: 13px; */
+		z-index: 1;
+		background: black;
+		border-radius: 50%;
+		padding: 5%;
+	}
+
 	img {
 		grid-area: 1/1;
 		box-sizing: border-box;
-		border-radius: 50%;
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		z-index: 1;
-		transition:
-			border-color 0.1s,
-			opacity 1s;
 	}
 
 	.shake {
@@ -77,19 +91,6 @@
 		}
 		to {
 			transform: rotate(30deg);
-		}
-	}
-
-	.sick {
-		animation: sick 1.5s linear alternate infinite;
-	}
-
-	@keyframes sick {
-		from {
-			transform: rotate(-15deg);
-		}
-		to {
-			transform: rotate(15deg);
 		}
 	}
 </style>

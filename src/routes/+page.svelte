@@ -95,8 +95,8 @@
 			return;
 		}
 
-		const elon = findZet();
-		let { x, y } = elon.vel;
+		const zet = findZet();
+		let { x, y } = zet.vel;
 
 		const max = ZET_MAX_VELOCITY * ss.scale;
 		const d = 0.5 * ss.scale;
@@ -122,7 +122,7 @@
 				break;
 		}
 
-		elon.vel = { x, y };
+		zet.vel = { x, y };
 	};
 
 	$effect(() => {

@@ -151,13 +151,13 @@ const onTick = () => {
 
             const check = (zob, fob) => {
                 if (isPet(fob) && !fob.dead) {
-                    _sound.play('lost', { rate: isZet(zob) ? 2 : 3 });
                     shake(fob);
-                    // fob.dead = isPet(zob) ? ss.ticks : true;
                     fob.dead = ss.ticks;
                     fob.lives -= 1;
 
-                    if (ss.fobs.filter(f => isPet(f)).every(f => f.dead)) {
+                    _sound.play('lost', { rate: fob.lives ? 3 : 2 });
+
+                    if (ss.fobs.filter(f => isPet(f)).every(f => f.lives === 0)) {
                         onOver();
                     }
                 }
@@ -232,8 +232,8 @@ const addZet = () => {
     const width = ss.space.width - radius * 2;
     const height = ss.space.height - radius * 2;
 
-    const elon = { id: 'zet', cx: random(width) + radius, cy: random(height) + radius, radius, vel: { x: 0, y: 0 }, dead: true };
-    ss.fobs.push(elon);
+    const zet = { id: 'zet', cx: random(width) + radius, cy: random(height) + radius, radius, vel: { x: 0, y: 0 }, dead: true };
+    ss.fobs.push(zet);
 };
 
 const addPets = () => {
@@ -248,11 +248,6 @@ const addPets = () => {
 };
 
 export const findZet = () => ss.fobs.find((fob) => isZet(fob));
-
-const shake = (fob) => {
-    fob.shake = true;
-    post(() => delete fob.shake, 200);
-};
 
 export const doResize = (init) => {
     ss.space = clientRect('.space');
@@ -272,7 +267,12 @@ export const doResize = (init) => {
     }
 };
 
-export const onOver = () => {
+const shake = (fob) => {
+    fob.shake = true;
+    post(() => delete fob.shake, 200);
+};
+
+const onOver = () => {
     _sound.play('lost');
     clearInterval(ss.timer);
     delete ss.timer;

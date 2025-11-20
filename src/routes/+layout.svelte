@@ -33,17 +33,22 @@
 	}
 
 	@font-face {
-		font-family: Orbitron;
-		src: url('$lib/fonts/Orbitron.ttf');
-	}
-
-	@font-face {
 		font-family: DMSans;
 		src: url('$lib/fonts/DMSans.ttf');
 	}
 
 	@font-face {
+		font-family: Orbitron;
+		src: url('$lib/fonts/Orbitron.ttf');
+	}
+
+	@font-face {
 		font-family: Radhiumz;
 		src: url('$lib/fonts/NcsRadhiumz-Rp3x6.ttf');
+	}
+
+	@font-face {
+		font-family: 'Roboto Condensed';
+		src: url('$lib/fonts/Roboto Condensed.ttf');
 	}
 </style>
