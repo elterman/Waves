@@ -14,7 +14,7 @@
 		<div class="num">
 			<NumberFlow value={ss.fobs.filter((f) => !f.dead).length} />
 		</div>
-		<div class="label" style="font-size: {lsz}px;">no infected kittens for</div>
+		<div class="label" style="font-size: {lsz}px;">plague-free time</div>
 	</div>
 {/if}
 
