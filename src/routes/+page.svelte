@@ -39,8 +39,6 @@
 		_sound.play('link1', { rate: 0.7 });
 
 		_stats.plays = ss.timer ? 1 : 0;
-		_stats.won = 0;
-		_stats.total_points = 0;
 		_stats.best_points = 0;
 
 		persist();

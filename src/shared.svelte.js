@@ -198,13 +198,9 @@ export const loadGame = () => {
         _sound.sfx = job.sfx;
         _sound.music = job.music;
         _stats.plays = job.plays;
-        _stats.won = job.won;
-        _stats.total_ticks = job.total_ticks;
         _stats.best_ticks = job.best_ticks;
     } else {
         _stats.plays = 0;
-        _stats.won = 0;
-        _stats.total_ticks = 0;
         _stats.best_ticks = 0;
     }
 };
