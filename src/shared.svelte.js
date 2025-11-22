@@ -84,6 +84,11 @@ const onTick = () => {
 
     if (liveCount() === PET_COUNT) {
         ss.streak_ticks += 1;
+
+        if (ss.streak_ticks > _stats.best_ticks) {
+            _stats.best_ticks = ss.streak_ticks;
+            persist();
+        }
     }
 
     const zet = findZet();
@@ -119,7 +124,6 @@ const onTick = () => {
 
         if (edge) {
             if (isZet(fob)) {
-                shake(fob);
                 _sound.play('plop');
                 ss.bounced = true;
                 post(() => delete ss.bounced, 1000);
@@ -156,6 +160,11 @@ const onTick = () => {
             const checkDied = (zob, fob) => {
                 if (isPet(fob) && !fob.dead) {
                     shake(fob);
+
+                    if (isZet(zob)) {
+                        shake(zob);
+                    }
+
                     fob.dead = ss.ticks;
                     ss.streak_ticks = 0;
 
